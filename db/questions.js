@@ -1,23 +1,6 @@
 const db = require('../config');
+const Queries = require('./index')
 
-function GetDepartmentNames(){
-    db.query('select name from department', (err, data) => {
-        const departmentNames = data.map(department => department.name);
-        return departmentNames;
-    })
-}
-function GetRoleNames(){
-    db.query('select title from role', (err, data) => {
-        const roleNames = data.map(role => role.title);
-        return roleNames;
-    })
-}
-function GetEmployeeNames(){
-    db.query("select concat(first_name,' ',last_name) as name from employee", (err, data) => {
-        const employeeNames = data.map(employee => employee.name);
-        return employeeNames;
-    })
-}
 
 const questions = {
     choices: [
@@ -25,7 +8,7 @@ const questions = {
             type: 'list',
             name: 'continue',
             message: 'What would you like to do?',
-            options: ['View all departments','Add a department','View all roles'
+            choices: ['View all departments','Add a department','View all roles'
                 ,'Add a Role','View all employees','Add an employee','Update an employee role','QUIT']
         }
     ],
@@ -51,7 +34,7 @@ const questions = {
             type: 'list',
             name: 'department',
             message: 'What department is the new role a part of?',
-            options: GetDepartmentNames()
+            choices: Queries.GetDepartmentNames()
         }
     ],
     addEmployee : [
@@ -69,13 +52,13 @@ const questions = {
             type: 'list',
             name: 'role',
             message: 'What role is the employee?',
-            options: GetRoleNames()
+            choices: Queries.GetRoleNames()
         },
         {
             type: 'list',
             name: 'manager',
             message: 'Who is their manager?',
-            options: GetEmployeeNames()
+            choices: Queries.GetEmployeeNames()
         }
     ],
     updateEmployeeRole : [
@@ -83,13 +66,13 @@ const questions = {
             type: 'list',
             name: 'employee',
             message: 'Select an employee to update',
-            options: GetEmployeeNames()
+            choices: Queries.GetEmployeeNames()
         },
         {
             type: 'list',
             name: 'role',
             message: 'Select an new role for the employee',
-            options: GetEmployeeNames()
+            choices: Queries.GetEmployeeNames()
         }
     ]
 }
