@@ -10,25 +10,101 @@ function Choices(){
     inquirer.prompt(questions.choices).then((answer) => {
         switch(answer.continue) {
             case 'View all departments':
-                Queries.GetAllDepartments().then((data) => console.table(data));
+                Queries.GetAllDepartments().then((data) => {console.table(data); Choices(); });
                 break;
             case 'Add a department':
                 AddDepartment();
                 break;
             case 'View all roles':
+                Queries.GetAllRoles().then((data) => {console.table(data); Choices(); });
+                break;
             case 'Add a Role':
+                AddRole();
+                break;
             case 'View all employees':
+                Queries.GetAllEmployees().then((data) => {console.table(data); Choices(); });
+                break;
             case 'Add an employee':
+                AddEmployee();
+                break;
             case 'Update an employee role':
             case 'QUIT':
+                process.exit();
                 break;
         }
     })
+    
 }
 
 function AddDepartment() {
     inquirer.prompt(questions.addDepartment).then((answer) => {
-        
+        const newDepartment = {
+            name: answer.name
+        }
+        Queries.AddDepartment(newDepartment);
+        Choices();
+    });
+}
+
+function AddRole() {
+    Queries.GetDepartmentNames().then((data) => {
+        const names = data;
+        inquirer.prompt(questions.addRole).then((answer) => {
+            inquirer.prompt([{
+                type: 'list',
+                name: 'name',
+                message: 'What department is the new role a part of?',
+                choices: names
+            }]).then((department) => {
+
+                Queries.GetDepartmentIdByName(department.name).then((data) => {
+                    const newRole = {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: data[0].id
+                    };
+                    Queries.AddRole(newRole);
+                    Choices();
+                })
+            })
+        })
+    })  
+}
+
+function AddEmployee() {
+    Queries.GetEmployeeNames().then((data) => {
+        const employeeNames = data;
+        Queries.GetRoleNames().then((roles) => {
+            const roleNames = roles;
+            inquirer.prompt(questions.addEmployee).then((answer) => {
+                inquirer.prompt([{
+                    type: 'list',
+                    name: 'role',
+                    message: 'What role is the employee?',
+                    choices: roleNames
+                },
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: 'Who is their manager?',
+                    choices: employeeNames
+                }]).then((names) => {
+                    Queries.GetRoleIdByName(names.role).then((roleId) => {
+                        const nameArr = names.manager.split(" ");
+                        Queries.GetEmployeeIdByName(nameArr[0], nameArr[1]).then((managerId)=>{
+                            const newEmployee = {
+                                first_name: answer.firstName,
+                                last_name: answer.lastName,
+                                role_id: roleId[0].id,
+                                manager_id: managerId[0].id
+                            }
+                            Queries.AddEmployee(newEmployee);
+                            Choices();
+                        })
+                    })
+                })
+            })
+        })
     })
 }
 

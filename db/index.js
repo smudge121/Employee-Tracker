@@ -34,6 +34,31 @@ GetAllEmployees : () => {
     return new Promise((res, rej) => db.query("select * from employee", (err, data) => {
         res(data);
     }))
+},
+GetDepartmentIdByName: (name) => {
+    return new Promise((res, rej) => db.query('select id from department where name = ?', name, (err, data) => {
+        res(data);
+    }))
+},
+GetRoleIdByName: (title) => {
+    return new Promise((res, rej) => db.query('select id from role where title = ?', title, (err, data) => {
+        res(data);
+    }))
+},
+GetEmployeeIdByName: (first, last) => {
+    return new Promise((res, rej) => db.query('select id from employee where first_name = ? and last_name = ?',
+        [first, last], (err, data) => {
+            res(data);
+    }))
+},
+AddDepartment : (body) => {
+    db.query('Insert into department set ?', body, (err) => {if (err) console.log(err)});
+},
+AddRole : (body) => {
+    db.query('Insert into role set ?', body, (err) => {if (err) console.log(err)});
+},
+AddEmployee : (body) => {
+    db.query('Insert into employee set ?', body);
 }
 }
 

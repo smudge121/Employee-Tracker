@@ -29,12 +29,6 @@ const questions = {
             type: 'input',
             name: 'salary',
             message: 'What is the salary of the role?'
-        },
-        {
-            type: 'list',
-            name: 'department',
-            message: 'What department is the new role a part of?',
-            choices: Queries.GetDepartmentNames()
         }
     ],
     addEmployee : [
@@ -47,18 +41,6 @@ const questions = {
             type: 'input',
             name: 'lastName',
             message: 'What is the last name of the employee'
-        },
-        {
-            type: 'list',
-            name: 'role',
-            message: 'What role is the employee?',
-            choices: Queries.GetRoleNames()
-        },
-        {
-            type: 'list',
-            name: 'manager',
-            message: 'Who is their manager?',
-            choices: Queries.GetEmployeeNames()
         }
     ],
     updateEmployeeRole : [
@@ -76,5 +58,7 @@ const questions = {
         }
     ]
 }
+
+
 
 module.exports = questions;
