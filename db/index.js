@@ -59,6 +59,9 @@ AddRole : (body) => {
 },
 AddEmployee : (body) => {
     db.query('Insert into employee set ?', body);
+},
+UpdateEmployeeRole : (body, employeeId) => {
+    db.query('Update employee set ? where ?', [body, {id : employeeId}])
 }
 }
 

@@ -28,6 +28,8 @@ function Choices(){
                 AddEmployee();
                 break;
             case 'Update an employee role':
+                UpdateEmployeeRole();
+                break;
             case 'QUIT':
                 process.exit();
                 break;
@@ -101,6 +103,38 @@ function AddEmployee() {
                             Queries.AddEmployee(newEmployee);
                             Choices();
                         })
+                    })
+                })
+            })
+        })
+    })
+}
+
+function UpdateEmployeeRole() {
+    Queries.GetEmployeeNames().then((employees) => {
+        Queries.GetRoleNames().then((roles) => {
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'employee',
+                    message: 'Select an employee to update',
+                    choices: employees
+                },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: 'Select an new role for the employee',
+                    choices: roles
+                }
+            ]).then((answers) => {
+                Queries.GetRoleIdByName(answers.role).then((roleId) => {
+                    const nameArr = answers.employee.split(" ");
+                    Queries.GetEmployeeIdByName(nameArr[0], nameArr[1]).then((employeeId) => {
+                        const updatedEmployee = {
+                            role_id: roleId[0].id
+                        }
+                        Queries.UpdateEmployeeRole(updatedEmployee,employeeId[0].id);
+                        Choices();
                     })
                 })
             })

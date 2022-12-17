@@ -42,20 +42,6 @@ const questions = {
             name: 'lastName',
             message: 'What is the last name of the employee'
         }
-    ],
-    updateEmployeeRole : [
-        {
-            type: 'list',
-            name: 'employee',
-            message: 'Select an employee to update',
-            choices: Queries.GetEmployeeNames()
-        },
-        {
-            type: 'list',
-            name: 'role',
-            message: 'Select an new role for the employee',
-            choices: Queries.GetEmployeeNames()
-        }
     ]
 }
 
